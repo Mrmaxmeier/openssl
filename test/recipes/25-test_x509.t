@@ -17,7 +17,7 @@ use File::Compare qw/compare_text/;
 
 setup("test_x509");
 
-plan tests => 157;
+plan tests => 159;
 
 # Prevent MSys2 filename munging for arguments that look like file paths but
 # aren't
@@ -419,6 +419,15 @@ my $time_spec_per_no_second_cert =
 cert_contains($time_spec_per_no_second_cert,
               "05:43:00 - 12:34:56",
               1, 'X.509 Time Specification (Periodic, no second)');
+
+my $time_spec_per_named_day_cert =
+    srctop_file(@certs, "ext-timeSpecification-periodic-namedday.pem");
+cert_contains($time_spec_per_named_day_cert,
+              "Days: SECOND MON",
+              1, 'X.509 Time Specification (Periodic, intNamedDays)');
+cert_contains($time_spec_per_named_day_cert,
+              "Days: FOURTH SUN",
+              1, 'X.509 Time Specification (Periodic, bitNamedDays)');
 
 my $attr_map_cert = srctop_file(@certs, "ext-attributeMappings.pem");
 cert_contains($attr_map_cert,
